@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println("==================================================");
+        System.out.println("===================7===============================");
         System.out.println("       EJECUCIÓN DEL EJERCICIO 3 - UTN FRM        ");
         System.out.println("==================================================\n");
 
