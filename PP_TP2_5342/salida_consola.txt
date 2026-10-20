@@ -1,0 +1,114 @@
+
+==================== EJERCICIO 1: excepciones y persistencia ====================
+
+--- Caso EXITOSO ---
+   Inscripto: Ana Gomez
+   Inscripto: Luis Perez
+   [persistir] Evento EV-1 guardado en datos/evento_EV-1.ser
+   [recuperar] Evento EV-1 leído desde datos/evento_EV-1.ser
+   Datos del evento recuperado:
+EVENTO EV-1: Semana de la Ingenieria | costo base $5000.0 | Sala{id=1, nombre='Aula Magna'} | costo estimado $6500.0
+   [Taller #10] Taller de Java | cupo 2/3
+      - Inscripcion{Ana Gomez (legajo 50268), fecha=2026-10-20, estado=PENDIENTE}
+      - Inscripcion{Luis Perez (legajo 50311), fecha=2026-10-20, estado=PENDIENTE}
+   [finally] Fin del flujo del evento EV-1
+
+--- Caso FALLIDO: cupo excedido (CupoExcedidoException) ---
+   Inscripto: Ana Gomez
+   [catch CupoExcedidoException] Cupo agotado en 'Charla de Robotica' (máximo 1): no se pudo inscribir a Luis Perez
+   AVISO: 'Charla de Robotica' no alcanza el cupo mínimo de 2 (inscriptos: 1)
+   [finally] Fin del flujo del evento EV-2
+
+--- Casos FALLIDOS de persistencia ---
+ * Leer un evento que no existe:
+   [recuperar] El archivo del evento 'NO-EXISTE' no existe: datos/evento_NO-EXISTE.ser
+ * Leer un archivo corrupto:
+   [recuperar] El archivo está corrupto o no es una serialización válida: invalid stream header: 6573746F
+
+--- Casos FALLIDOS de datos inválidos ---
+   [datos inválidos] El campo 'legajo' no puede ser nulo ni vacío
+   [datos inválidos] El campo 'cupo máximo' debe ser mayor a 0 (recibido: 0)
+
+==================== EJERCICIO 2: interfaces y certificados ====================
+
+Certificados emitidos (solo Taller y Curso):
+   (Charla 'Charla de IA': no certificable)
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Ana Gomez (legajo 50268) asistió al Taller 'Taller de Git'
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Luis Perez (legajo 50311) asistió al Taller 'Taller de Git'
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Eva Torres (legajo 50400) asistió al Taller 'Taller de Git'
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Ana Gomez (legajo 50268) asistió al Curso 'Curso de SQL' (nivel 2)
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Luis Perez (legajo 50311) asistió al Curso 'Curso de SQL' (nivel 2)
+   CERTIFICADO DE ASISTENCIA | Emisor: UTN - Facultad Regional Mendoza | Eva Torres (legajo 50400) asistió al Curso 'Curso de SQL' (nivel 2)
+
+Datos del evento:
+EVENTO EV-3: Congreso de Sistemas | costo base $4000.0 | Sala{id=3, nombre='Auditorio'} | costo estimado $7300.0
+   [Charla #30] Charla de IA | cupo 3/50
+      - Inscripcion{Ana Gomez (legajo 50268), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Luis Perez (legajo 50311), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Eva Torres (legajo 50400), fecha=2026-10-20, estado=CONFIRMADA}
+   [Taller #31] Taller de Git | cupo 3/20
+      - Inscripcion{Ana Gomez (legajo 50268), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Luis Perez (legajo 50311), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Eva Torres (legajo 50400), fecha=2026-10-20, estado=CONFIRMADA}
+   [Curso #32] Curso de SQL | cupo 3/20
+      - Inscripcion{Ana Gomez (legajo 50268), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Luis Perez (legajo 50311), fecha=2026-10-20, estado=CONFIRMADA}
+      - Inscripcion{Eva Torres (legajo 50400), fecha=2026-10-20, estado=CONFIRMADA}
+
+==================== EJERCICIO 3: genericos acotados y wildcards ====================
+
+Cantidad de actividades por tipo en EV-4:
+   Charlas: 2
+   Talleres: 1
+   Cursos: 2
+
+Costo de materiales por tipo (List<? extends Actividad>):
+   Charlas:  $400.0
+   Talleres: $2300.0
+   Cursos:   $2600.0
+   Total (List<Actividad>): $5300.0
+
+Listas correctamente tipadas (sin casts):
+   List<Charla>.get(0).getDisertante()      = Ing. Soto
+   List<Taller>.get(0).isRequiereNotebook() = false
+   List<Curso>.get(0).getNivel()            = 1
+
+==================== EJERCICIO 4: clases anidadas e hilos ====================
+Tickets generados (inscripciones confirmadas): 8
+
+[main] Inicio los hilos de envío...
+   [Hilo-Envio-EV-6] INICIO del envío de tickets del evento EV-6
+   [Hilo-Envio-EV-5] INICIO del envío de tickets del evento EV-5
+   [Hilo-Envio-EV-5] Ticket TKT-50-50268 enviado a Ana Gomez para 'Charla de Arquitectura' (emitido 2026-10-20)
+   [Hilo-Envio-EV-6] Ticket TKT-60-50268 enviado a Ana Gomez para 'Curso de Big Data' (emitido 2026-10-20)
+[main] EVENTO EV-5: Jornadas de Software | Sala{id=5, nombre='Sala Norte'}
+[main] Charla 'Charla de Arquitectura' inscriptos: 4
+[main]      - Ana Gomez [CONFIRMADA]
+[main]      - Luis Perez [PENDIENTE]
+   [Hilo-Envio-EV-6] Ticket TKT-60-50400 enviado a Eva Torres para 'Curso de Big Data' (emitido 2026-10-20)
+   [Hilo-Envio-EV-5] Ticket TKT-50-50400 enviado a Eva Torres para 'Charla de Arquitectura' (emitido 2026-10-20)
+[main]      - Eva Torres [CONFIRMADA]
+[main]      - Mario Diaz [PENDIENTE]
+   [Hilo-Envio-EV-6] Ticket TKT-61-50268 enviado a Ana Gomez para 'Charla de Data Ethics' (emitido 2026-10-20)
+   [Hilo-Envio-EV-5] Ticket TKT-51-50268 enviado a Ana Gomez para 'Taller de Testing' (emitido 2026-10-20)
+[main] Taller 'Taller de Testing' inscriptos: 4
+[main]      - Ana Gomez [CONFIRMADA]
+[main]      - Luis Perez [PENDIENTE]
+[main]      - Eva Torres [CONFIRMADA]
+   [Hilo-Envio-EV-6] Ticket TKT-61-50400 enviado a Eva Torres para 'Charla de Data Ethics' (emitido 2026-10-20)
+   [Hilo-Envio-EV-5] Ticket TKT-51-50400 enviado a Eva Torres para 'Taller de Testing' (emitido 2026-10-20)
+[main]      - Mario Diaz [PENDIENTE]
+[main] EVENTO EV-6: Semana de Datos | Sala{id=6, nombre='Sala Sur'}
+   [Hilo-Envio-EV-6] FIN: 4 ticket(s) enviados
+   [Hilo-Envio-EV-5] FIN: 4 ticket(s) enviados
+[main] Curso 'Curso de Big Data' inscriptos: 4
+[main]      - Ana Gomez [CONFIRMADA]
+[main]      - Luis Perez [PENDIENTE]
+[main]      - Eva Torres [CONFIRMADA]
+[main]      - Mario Diaz [PENDIENTE]
+[main] Charla 'Charla de Data Ethics' inscriptos: 4
+[main]      - Ana Gomez [CONFIRMADA]
+[main]      - Luis Perez [PENDIENTE]
+[main]      - Eva Torres [CONFIRMADA]
+[main]      - Mario Diaz [PENDIENTE]
+[main] Todos los hilos de envío finalizaron.
